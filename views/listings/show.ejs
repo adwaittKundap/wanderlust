@@ -1,0 +1,202 @@
+<% layout("/layout/boilerplate") %>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+
+                <h3 class="mb-3">
+                    <%= listing.title %>
+                </h3>
+
+                <div class="card border-0 shadow-sm p-3">
+
+                    <!-- IMAGE -->
+                    <img src="<%= listing.image.url%>" alt="listing image" class="img-fluid rounded mb-4"
+                        style="height: 320px; width: 100%; object-fit: cover;">
+
+
+                    <!-- DESCRIPTION -->
+                    <p class="text-muted mb-2">
+                        <i> Created by :
+                            <%=listing.owner.username %>
+                        </i>
+                        <br>
+                        <%= listing.description %>
+                    </p>
+
+                    <!-- PRICE -->
+                    <p class="fw-semibold mb-1">
+                        ₹ <%= listing.price.toLocaleString("en-IN") %>
+                    </p>
+
+                    <!-- LOCATION -->
+                    <p class="mb-0">
+                        <%= listing.location %>
+                    </p>
+
+                    <!-- COUNTRY -->
+                    <p class="mb-4">
+                        <%= listing.country %>
+                    </p>
+
+
+                    <!--edit BUTTONS -->
+                    <div class="d-flex gap-3">
+                        <form action="/listings/<%= listing._id %>/edit">
+                            <button class="btn btn-danger px-4">
+                                Edit
+                            </button>
+                        </form>
+
+                        <!--Delete BUTTONS -->
+                        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
+                            <button class="btn btn-dark px-4">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- add new review -->
+    <% if(currUser) { %>
+        <hr>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-7 col-xl-6">
+
+                    <div class="card shadow-lg rounded-4 p-4" style="background-color:#f0fdfa; color:#134e4a;">
+
+                        <h4 class="text-center mb-4">Leave a Review</h4>
+
+                        <form method="post" action="/listings/<%= listing._id %>/reviews" novalidate
+                            class="needs-validation">
+
+
+                            <!-- Rating -->
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Rating</label>
+                                <div class="star-rating">
+                                    <input type="radio" name="review[rating]" id="star5" value="5" required>
+                                    <label for="star5" class="fa fa-star"></label>
+
+                                    <input type="radio" name="review[rating]" id="star4" value="4">
+                                    <label for="star4" class="fa fa-star"></label>
+
+                                    <input type="radio" name="review[rating]" id="star3" value="3">
+                                    <label for="star3" class="fa fa-star"></label>
+
+                                    <input type="radio" name="review[rating]" id="star2" value="2">
+                                    <label for="star2" class="fa fa-star"></label>
+
+                                    <input type="radio" name="review[rating]" id="star1" value="1">
+                                    <label for="star1" class="fa fa-star"></label>
+                                </div>
+
+                            </div>
+
+                            <!-- Comment -->
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Comments</label>
+                                <textarea class="form-control border-0" style="background:#ffffff;"
+                                    name="review[comment]" rows="4" placeholder="Enter your comments..."
+                                    required></textarea>
+                                <div class="invalid-feedback">Please enter feedback</div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button class="btn w-100 rounded-pill" style="background:#14b8a6; color:white;">
+                                Submit Review
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+
+            <!-- allList of feedback  -->
+            <hr>
+            <h4 class="review-title">Customer Reviews</h4>
+
+            <div class="reviews-wrapper">
+
+                <% for (let review of listing.reviews) { %>
+
+                    <div class="review-card">
+                        <div class="review-content">
+
+                            <div class="review-text">
+                                <strong>
+                                    <%= review.comment %>,
+                                        <span class="rating">
+                                            <%= review.rating %> ★
+                                        </span>
+                                </strong>
+
+                                <div class="review-meta">
+                                    Reviewed by <em>
+                                        <%= review.authorName?.username || "Anonymous" %>
+                                    </em>
+                                </div>
+                            </div>
+                            <% if(currUser) { %>
+                                <form method="POST"
+                                    action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                                    <button class="delete-btn">
+                                        Delete Review
+                                    </button>
+                                </form>
+                                <% } %>
+
+                        </div>
+                    </div>
+
+                    <% } %>
+
+            </div>
+
+
+            <hr>
+            <h5>Map of above Listing :</h5>
+            <div id="map" style="height:200px; width:100%; border-radius:10px;">
+                <% if (listing.geometry && listing.geometry.coordinates) { %>
+
+                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+                    <script>
+                        const coordinates = JSON.parse('<%- JSON.stringify(listing.geometry.coordinates) %>');
+
+                        const map = L.map("map").setView(
+                            [coordinates[1], coordinates[0]], // lat, lng
+                            10
+                        );
+
+                        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                            maxZoom: 19,
+                            attribution: "© OpenStreetMap contributors",
+                        }).addTo(map);
+
+
+                        L.marker([coordinates[1], coordinates[0]])
+                            .addTo(map)
+                            .bindPopup("<%= listing.location %>")
+                            .openPopup();
+                    </script>
+
+
+                    <% } else { %>
+
+                        <p class="text-muted">Location not available</p>
+
+                        <% } %>
+            </div>

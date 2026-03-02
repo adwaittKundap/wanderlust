@@ -1,0 +1,26 @@
+<% layout("/layout/boilerplate") %>
+    <link rel="stylesheet" href="/css/login.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <form action="/login" method="post">
+        <div class="container d-flex justify-content-center align-items-center vh-100">
+            <div class="paper-card p-4 position-relative">
+                <div class="pin"></div>
+
+                <h4 class="text-center mb-4">Login for listing</h4>
+
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input name="username" type="text" class="form-control" placeholder="enter you registered Username">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input name="password" type="password" class="form-control" placeholder="enter you password">
+                </div>
+
+                <button class="btn btn-success w-100 mt-3">Submit</button>
+            </div>
+        </div>
+    </form>

@@ -1,0 +1,80 @@
+/* style for signup*/
+/* FULL SCREEN BACKGROUND */
+
+
+/* CARD */
+.galaxy-card {
+    width: 100%;
+    max-width: 550px;
+    /* responsive */
+    border-radius: 18px;
+    background: rgba(20, 20, 40, 0.85);
+    box-shadow:
+        0 0 25px rgba(0, 255, 255, 0.3),
+        0 0 60px rgba(138, 43, 226, 0.25);
+    backdrop-filter: blur(10px);
+}
+
+/* INPUTS */
+.galaxy-input {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.galaxy-input::placeholder {
+    color: #bbb;
+}
+
+.galaxy-input:focus {
+    border-color: cyan;
+    box-shadow: 0 0 8px cyan;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* BUTTON */
+.galaxy-btn {
+    background: linear-gradient(135deg, #00ffcc, #6f42c1);
+    border: none;
+    color: #000;
+    font-weight: 600;
+    padding: 1.4rem;
+    border-radius: 30px;
+}
+
+
+/* style for login*/
+
+body {
+    background: linear-gradient(135deg, #dbeafe, #f8fafc);
+}
+
+.paper-card {
+    width: 660px;
+    background: #fdfcf8;
+    border-radius: 20px;
+    box-shadow: 0 30px 25px rgba(0, 0, 0, 0.15);
+    font-family: "Segoe UI", sans-serif;
+}
+
+.paper-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(transparent,
+            transparent 28px,
+            rgba(0, 0, 0, 0.03) 29px);
+    pointer-events: none;
+}
+
+.pin {
+    width: 14px;
+    height: 14px;
+    background: gold;
+    border-radius: 50%;
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
